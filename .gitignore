@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+database/*.db
+
+# O vídeo do pitch vai só no ZIP do Moodle (pode passar do limite de 100 MB do GitHub)
+*.mp4

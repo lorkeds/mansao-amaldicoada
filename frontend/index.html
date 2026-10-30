@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Escape room de Halloween: escape da Mansão Amaldiçoada em 5 minutos.">
+  <title>Mansão Amaldiçoada</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎃</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Creepster&display=swap">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="neblina" aria-hidden="true"></div>
+
+  <header class="topo">
+    <h1>🎃 Mansão Amaldiçoada</h1>
+    <p class="subtitulo">Um escape room de Halloween. Você tem <strong>5 minutos</strong> para escapar.</p>
+    <button id="botao-som" class="botao-icone" type="button" aria-pressed="true" title="Ligar/desligar sons">🔊</button>
+  </header>
+
+  <div class="layout">
+    <main class="painel-principal">
+
+      <!-- ===================== TELA 1: INÍCIO ===================== -->
+      <section id="tela-inicio" class="tela" aria-labelledby="titulo-inicio">
+        <h2 id="titulo-inicio">As portas se fecharam atrás de você...</h2>
+
+        <form id="form-inicio" class="form-inicio" autocomplete="off">
+          <label for="nome-jogador">Como você se chama, visitante?</label>
+          <div class="linha-form">
+            <input type="text" id="nome-jogador" placeholder="Seu nome" minlength="2" maxlength="30"
+                   autocomplete="nickname" required>
+            <button id="iniciar" type="submit">Entrar na mansão</button>
+          </div>
+          <p id="erro-inicio" class="erro" role="alert"></p>
+        </form>
+
+        <div class="regras">
+          <article>
+            <h3>🎯 Objetivo</h3>
+            <p>Passe pelos 4 cômodos da mansão e abra a porta de saída antes de o tempo acabar.</p>
+          </article>
+          <article>
+            <h3>🕹️ Como jogar</h3>
+            <p>Passe o mouse pelo cenário: onde aparecer a 🔍 lupa, há algo para investigar. Junte pistas e itens e digite as senhas nos cadeados. A combinação final <strong>muda a cada partida</strong>.</p>
+          </article>
+          <article>
+            <h3>🏆 Pontuação</h3>
+            <p>Cada segundo que sobrar vale <strong>10 pontos</strong>. Cada senha errada tira <strong>50 pontos</strong>. Travou? Peça uma 💡 dica, mas ela custa <strong>20 segundos</strong>.</p>
+          </article>
+          <article>
+            <h3>💀 Derrota</h3>
+            <p>Se o cronômetro chegar a 00:00, a mansão vence e a partida termina sem pontos.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ===================== TELA 2: JOGO ===================== -->
+      <section id="tela-jogo" class="tela" hidden aria-labelledby="titulo-fase">
+        <div class="hud">
+          <div class="hud-item">
+            <span class="hud-rotulo">Cômodo</span>
+            <span id="hud-fase" class="hud-valor">1 / 4</span>
+          </div>
+          <div class="hud-item hud-tempo">
+            <span class="hud-rotulo">Tempo</span>
+            <span id="tempo" class="hud-valor" role="timer" aria-live="off">05:00</span>
+          </div>
+          <div class="hud-item">
+            <span class="hud-rotulo">Erros</span>
+            <span id="hud-erros" class="hud-valor">0</span>
+          </div>
+          <div class="hud-item hud-inventario">
+            <span class="hud-rotulo">Inventário</span>
+            <span id="hud-itens" class="hud-valor">vazio</span>
+          </div>
+        </div>
+        <div class="progresso" aria-hidden="true"><div id="barra-progresso"></div></div>
+
+        <h2 id="titulo-fase">Biblioteca Esquecida</h2>
+        <p id="objetivo-fase" class="objetivo"></p>
+
+        <!-- Os objetos clicáveis são criados pelo game.js a partir do que a API mandar -->
+        <div id="cenario" class="cenario" data-fase="1"></div>
+
+        <p id="mensagem" class="mensagem" aria-live="polite"></p>
+
+        <form id="form-senha" class="form-senha" hidden autocomplete="off">
+          <label id="rotulo-senha" for="senha">Senha</label>
+          <div class="linha-form">
+            <input id="senha" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••">
+            <button type="submit">Tentar</button>
+          </div>
+        </form>
+
+        <div class="rodape-jogo">
+          <button id="dica" class="botao-dica" type="button">💡 Pedir dica (−20 s)</button>
+          <button id="desistir" class="botao-discreto" type="button">Desistir da partida</button>
+        </div>
+      </section>
+
+      <!-- ===================== TELA 3: FIM ===================== -->
+      <section id="tela-fim" class="tela" hidden aria-labelledby="fim-titulo">
+        <div id="fim-emoji" class="fim-emoji" aria-hidden="true">🏆</div>
+        <h2 id="fim-titulo">Você escapou!</h2>
+        <p id="fim-texto"></p>
+
+        <dl class="resumo">
+          <div><dt>Pontos</dt><dd id="fim-pontos">0</dd></div>
+          <div><dt>Tempo</dt><dd id="fim-tempo">0s</dd></div>
+          <div><dt>Erros</dt><dd id="fim-erros">0</dd></div>
+          <div><dt>Dicas</dt><dd id="fim-dicas">0</dd></div>
+        </dl>
+
+        <div id="fim-conquistas" class="conquistas-novas"></div>
+
+        <button id="jogar-novamente" type="button">Jogar novamente</button>
+      </section>
+    </main>
+
+    <!-- ===================== LATERAL: DADOS DO BANCO ===================== -->
+    <aside class="lateral">
+      <section class="caixa" aria-labelledby="titulo-ranking">
+        <h2 id="titulo-ranking">🏆 Ranking dos Sobreviventes</h2>
+        <table class="tabela-ranking">
+          <thead>
+            <tr><th>#</th><th>Jogador</th><th>Pontos</th><th>Tempo</th></tr>
+          </thead>
+          <tbody id="lista-ranking">
+            <tr><td colspan="4" class="vazio">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="caixa" aria-labelledby="titulo-estatisticas">
+        <h2 id="titulo-estatisticas">📊 A mansão em números</h2>
+        <dl id="estatisticas" class="estatisticas">
+          <div><dt>Visitantes</dt><dd data-campo="jogadores">–</dd></div>
+          <div><dt>Partidas</dt><dd data-campo="partidas">–</dd></div>
+          <div><dt>Fugas</dt><dd data-campo="vitorias">–</dd></div>
+          <div><dt>Almas presas</dt><dd data-campo="derrotas">–</dd></div>
+        </dl>
+      </section>
+
+      <section id="perfil" class="caixa" hidden aria-labelledby="titulo-perfil">
+        <h2 id="titulo-perfil">🕯️ Seu histórico</h2>
+        <div id="perfil-conquistas" class="lista-conquistas"></div>
+        <ul id="perfil-historico" class="historico"></ul>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="rodape">Hackathon Projeção 2026</footer>
+
+  <!-- Trilha sonora: sem "controls", o elemento fica invisível. Quem liga e desliga é o botão 🔊 -->
+  <audio id="trilha" src="/assets/audio/trilha.mp3" loop preload="auto"></audio>
+
+  <script src="/js/game.js"></script>
+</body>
+</html>

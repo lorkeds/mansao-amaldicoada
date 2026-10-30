@@ -1,0 +1,21 @@
+# Blueprint do Render: cria o servidor web + o banco PostgreSQL de uma vez.
+# No painel do Render: New > Blueprint > escolha o repositório do GitHub.
+services:
+  - type: web
+    name: mansao-amaldicoada
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: gunicorn --chdir backend app:app
+    healthCheckPath: /api/saude
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mansao-db
+          property: connectionString
+
+databases:
+  - name: mansao-db
+    plan: free
