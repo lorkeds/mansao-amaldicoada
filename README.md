@@ -6,7 +6,9 @@ Você ficou preso numa mansão assombrada e tem **5 minutos** para escapar. Inve
 
 ## 🌐 URL pública
 
-**https://SEU-SERVICO.onrender.com** ← ⚠️ *TROCAR pela URL do Render depois de publicar (aqui e na seção "Publicar no Render")*
+**https://mansao-amaldicoada.onrender.com**
+
+No plano gratuito do Render o servidor "dorme" depois de 15 minutos sem acesso: o primeiro acesso pode demorar cerca de 1 minuto.
 
 Para conferir se o servidor e o banco estão no ar, abra `/api/saude`.
 
@@ -72,7 +74,7 @@ python backend/limpar_banco.py
 1. Envie o projeto para um repositório no GitHub.
 2. No Render: **New → Blueprint** → escolha o repositório.
 3. O `render.yaml` cria o banco PostgreSQL e o servidor web e liga os dois pela variável `DATABASE_URL`.
-4. Depois do deploy, abra `https://SEU-SERVICO.onrender.com/api/saude` — deve mostrar `"banco": "postgresql"`.
+4. Depois do deploy, abra `https://mansao-amaldicoada.onrender.com/api/saude` — deve mostrar `"banco": "postgresql"`.
 
 No plano gratuito o servidor dorme após 15 min sem uso: abra o site alguns minutos antes da avaliação.
 
