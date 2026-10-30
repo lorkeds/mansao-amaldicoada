@@ -51,4 +51,3 @@ render.yaml   publicação no Render
 - Trilha: *Shivers in the Shadows*, Victor Lundberg (Epidemic Sound)
 - Efeitos e som ambiente: gerados por código (Web Audio API)
 - Fonte Creepster (Google Fonts, SIL OFL)
-- Imagens dos cenários: *(informar a origem)*
